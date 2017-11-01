@@ -1,0 +1,113 @@
+﻿<Page
+    x:Class="BuildingAppsDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BuildingAppsDemo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:converter="using:BuildingAppsDemo.Converters"
+    xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:viewServices="using:BuildingAppsDemo.ArcGIS.ViewServices"
+     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" 
+    xmlns:Interactions="using:Microsoft.Xaml.Interactions.Core"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <converter:BoolToVisibilityConverter x:Key="boolToVisibiltyConverter"/>
+    </Page.Resources>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+            <esri:MapView x:Name="MyMapView" Map="{Binding Map}" Grid.Column="1"
+                viewServices:MapViewService.ViewService="{Binding MapViewService}">
+                <Interactivity:Interaction.Behaviors>
+                    <Interactions:EventTriggerBehavior EventName="GeoViewTapped" SourceObject="{Binding ElementName=MyMapView}">
+                        <Interactions:InvokeCommandAction Command="{Binding ShowPopupCommand}" />
+                    </Interactions:EventTriggerBehavior>
+                </Interactivity:Interaction.Behaviors>
+            </esri:MapView>
+            
+            <!-- Add Zoom controls -->
+            <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <AppBarButton Icon="ZoomIn" Label="Zoom in" IsCompact="True" Height="48" Foreground="Black"
+                          Command="{Binding ZoomInCommand}"
+                          />
+                <AppBarButton Icon="Home" Label="Full extent" Grid.Row="1" IsCompact="True" Height="48" Foreground="Black"
+                          Command="{Binding ResetViewPointCommand}"/>
+                <AppBarButton Icon="ZoomOut" Label="Zoom out" Grid.Row="2" IsCompact="True" Height="48" Foreground="Black"
+                          Command="{Binding ZoomOutCommand}"/>
+            </Grid>
+
+            <!-- Add compass -->
+            <esriToolkit:Compass  Heading="{Binding MapRotation, ElementName=MyMapView, Mode=OneWay}" Height="40" Width="40"
+                             Margin="20,30" AutoHide="False" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+
+            <StackPanel HorizontalAlignment="Right" Width="100" 
+                Visibility="{Binding InOnlineMode, Mode=OneWay, Converter={StaticResource boolToVisibiltyConverter}}">
+                <Button Content="Generate area"
+                            Command="{Binding GenerateMapAreaCommand}"
+                            Margin="10,5" HorizontalAlignment="Stretch"
+                            Background="White" BorderBrush="{ThemeResource ToggleSwitchFillOn}"/>
+            </StackPanel>
+
+        </Grid>
+
+        <Pivot Grid.Column="0" Background="WhiteSmoke" Width="400" HorizontalAlignment="Left">
+            <PivotItem Header="ToC">
+                <ScrollViewer Margin="5,0">
+                    <ItemsControl ItemsSource="{x:Bind MyMapView.Map.OperationalLayers, Mode=OneWay}" Margin="10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                    <esriToolkit:LayerLegend LayerContent="{Binding}" ShowEntireTreeHiarchy="True" Margin="10,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="Details">
+                <ScrollViewer Margin="5,0" x:Name="featureArea">
+                    <ItemsControl ItemsSource="{Binding SelectedFeature.Attributes, Mode=OneWay}" Margin="10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Key}" FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Value}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </PivotItem>
+        </Pivot>
+        <Grid 
+            Background="#66080808"
+            Grid.ColumnSpan="10" Grid.RowSpan="10"
+            Visibility="{Binding IsBusy, Mode=OneWay, Converter={StaticResource boolToVisibiltyConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="1">
+                <TextBlock Foreground="White" FontSize="30" HorizontalAlignment="Center">
+                    <Run Text="{Binding IsBusyText, Mode=OneWay}"/>
+                    <Run Text="{Binding ProgressPercentage, Mode=OneWay}"/>
+                </TextBlock>
+                <ProgressBar Margin="10" Height="10" Foreground="White" Width="200" IsIndeterminate="True"></ProgressBar>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
