@@ -2,12 +2,9 @@
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using BuildingAppsDemo.ArcGIS.ViewServices;
+using System.Diagnostics;
 
 namespace BuildingAppsDemo
 {
@@ -29,6 +26,9 @@ namespace BuildingAppsDemo
             }
             catch (Exception ex)
             {
+                // Production level error handling...
+                Debug.WriteLine(ex.ToString());
+                throw;
             }
         }
 
@@ -62,6 +62,8 @@ namespace BuildingAppsDemo
             }
             catch (Exception ex)
             {
+                // Production level error handling...
+                Debug.WriteLine(ex.ToString());
             }
         }
 
