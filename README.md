@@ -1,7 +1,7 @@
 # DSE2017-building-apps-ArcGISRuntime-dotnet
 A simple example app how to use ArcGIS Runtime for .NET to build UWP application. This demo was used in Developer Summit Europe 2017 to demonstrate the basic usage of ArcGIS Runtime SDK for .NET, Toolkit control usage and simplified MVVM.
 
-<img src="GeneralUI.jpg" width="350"/>
+<img src="GeneralUI.PNG" width="350"/>
 
 ## Features
 - Opening and loading map from ArcGIS Online (ArcGISPortal, PortalItem, Map)
