@@ -14,10 +14,11 @@ A simple example app how to use ArcGIS Runtime for .NET to build UWP application
 
 ## Requirements
 
-- [ArcGIS Runtime for .NET SDK](https://developers.arcgis.com/net/) Version 100.1
-- [ArcGIS Runtime Toolkit for UWP](https://github.com/Esri/arcgis-toolkit-dotnet)
+- [ArcGIS Runtime for .NET SDK](https://developers.arcgis.com/net/) Version 100.1 for the GIS functionality
+- [ArcGIS Runtime Toolkit for UWP](https://github.com/Esri/arcgis-toolkit-dotnet) for extra controls
   - Note: current build used from https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet.
-- [ArcGIS Online user](https://developers.arcgis.com/sign-up)
+- [ArcGIS Online user](https://developers.arcgis.com/sign-up) to generate offline basemaps
+- [Prism Windows](http://prismlibrary.github.io/) to provide basic MVVM framework
 
 
 
